@@ -30,7 +30,13 @@ The dataset comes from the United States government's open data website data.gov
 [Link to the dataset](https://catalog.data.gov/dataset/amending-america-proposed-amendments-to-the-united-states-constitution-1787-to-2014)
 
 
+Now to transform our data to a suitable format for analysis, we first import pandas so we can convert the dataset into a dataframe
 
+```python
+import pandas as pd
+df = pd.read_csv("proposed_amendments.csv", encoding="ISO-8859-1")
+df
+```
 
 
 Text can be **bold**, _italic_, or ~~strikethrough~~.
