@@ -13,5 +13,3 @@ include:
   - ISSUE_TEMPLATE.md
   - PULL_REQUEST_TEMPLATE.md
 theme: jekyll-theme-minimal
-
-title: 'Analysis of Proposed Amendments of the Constitution between 1787 to 2014'
