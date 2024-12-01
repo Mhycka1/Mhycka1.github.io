@@ -1388,7 +1388,7 @@ plt.show()
 
 
     
-![png](Checkpoint_3_files/Checkpoint_3_10_0.png)
+![png](images/Checkpoint_3_10_0.png)
     
 
 
@@ -1418,7 +1418,7 @@ df_18th_count["count"].hist()
 
 
     
-![png](Checkpoint_3_files/Checkpoint_3_13_1.png)
+![png](images/Checkpoint_3_13_1.png)
     
 
 
@@ -1440,7 +1440,7 @@ df_19th_count["count"].hist()
 
 
     
-![png](Checkpoint_3_files/Checkpoint_3_14_1.png)
+![png](images/Checkpoint_3_14_1.png)
     
 
 
@@ -1462,7 +1462,7 @@ df_20th_count["count"].hist()
 
 
     
-![png](Checkpoint_3_files/Checkpoint_3_15_1.png)
+![png](images/Checkpoint_3_15_1.png)
     
 
 
@@ -1484,7 +1484,7 @@ df_21st_count["count"].hist()
 
 
     
-![png](Checkpoint_3_files/Checkpoint_3_16_1.png)
+![png](images/Checkpoint_3_16_1.png)
     
 
 
@@ -1931,31 +1931,31 @@ counts_21st = plot_words(df_21st.sample(n = 300, random_state = 42), "21st Centu
 
 
     
-![png](Checkpoint_3_files/Checkpoint_3_25_0.png)
+![png](images/Checkpoint_3_25_0.png)
     
 
 
 
     
-![png](Checkpoint_3_files/Checkpoint_3_25_1.png)
+![png](images/Checkpoint_3_25_1.png)
     
 
 
 
     
-![png](Checkpoint_3_files/Checkpoint_3_25_2.png)
+![png](images/Checkpoint_3_25_2.png)
     
 
 
 
     
-![png](Checkpoint_3_files/Checkpoint_3_25_3.png)
+![png](images/Checkpoint_3_25_3.png)
     
 
 
 
     
-![png](Checkpoint_3_files/Checkpoint_3_25_4.png)
+![png](images/Checkpoint_3_25_4.png)
     
 
 
@@ -2123,7 +2123,7 @@ plt.show()
 
 
     
-![png](Checkpoint_3_files/Checkpoint_3_34_0.png)
+![png](images/Checkpoint_3_34_0.png)
 
 ## Primary Analysis
 
@@ -2208,7 +2208,7 @@ plt.show()
 
 
     
-![png](Checkpoint_3_files/Checkpoint_3_38_0.png)
+![png](images/Checkpoint_3_38_0.png)
     
 
 
@@ -2231,7 +2231,7 @@ visualizer.show()
 
 
     
-![png](Checkpoint_3_files/Checkpoint_3_40_0.png)
+![png](images/Checkpoint_3_40_0.png)
     
 
 
@@ -2376,13 +2376,13 @@ plot_clusters(X_tsne, tsne_labels,
 
 
     
-![png](Checkpoint_3_files/Checkpoint_3_48_1.png)
+![png](images/Checkpoint_3_48_1.png)
     
 
 
 
     
-![png](Checkpoint_3_files/Checkpoint_3_48_2.png)
+![png](images/Checkpoint_3_48_2.png)
     
 
 
