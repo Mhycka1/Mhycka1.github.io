@@ -1,6 +1,6 @@
 ---
 layout: default
-title: CMSC320 Final Project
+title: testing
 ---
 
 # Analysis of Proposed Amendments of the Constitution between 1787 to 2014
