@@ -19,12 +19,15 @@ Gianfranco: contributed to brainstorming in part A, did statistical analysis in 
 
 ### Introduction
 
-The objective of this project was to analyze the historical evolution of priorities and perceived problems of the American public. Specifically we wanted to answer the question of _Can the language and content of proposed amendments reveal the century in which they were proposed?_ Answering this question is important because it will reveal how the issues Americans deemed critical have evolved and how historical context shapes our political and legal discourse.
+The objective of this project was to analyze the historical evolution of priorities and perceived problems of the American public. Specifically we wanted to answer the question _can the language and content of proposed amendments reveal the century in which they were proposed?_ Answering this question is important because it will reveal how the issues Americans deemed critical have evolved and how historical context shapes our political and legal discourse.
 
 ### Data curation
 
+Our data is a dataset of proposed amendments from the year 1787 to 2014. This dataset provides the title/description of each amendment, the date proposed, the sponsor name, the sponsor state, the Congress number, the congress sessions, the joint resolution chamber and the joint resolution number. 
 
+The dataset comes from the United States government's open data website data.gov, specifically from the National Archives and Records Administration who published the data. The link to the dataset is below
 
+[Link to the dataset](https://catalog.data.gov/dataset/amending-america-proposed-amendments-to-the-united-states-constitution-1787-to-2014)
 
 
 
