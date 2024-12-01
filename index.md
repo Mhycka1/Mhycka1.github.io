@@ -3,14 +3,25 @@ layout: default
 ---
 
 # Analysis of Proposed Amendments of the Constitution between 1787 to 2014
-Fall 2024 Data Science Project
-Michael McDonald
-Olanyi Salami
-Gianfranco Secondi
-Dhruvak Mirani
+Michael McDonald, Dhruvak Mirani, Olaniyi Salami, Gianfranco Secondi
 
-Introduction
 
+### Contributions
+Michael: contributed to brainstorming in part A, responsible for preprocessing in part B, data exploration in part C and assembling the document in part G
+
+Dhruvak: contributed to brainstorming in part A, did statistical analysis in part C, and wrote the conclusion for part F
+
+Olaniyi: contributed to brainstorming in part A, did statistical analysis in part C, worked on part D, E and the visualization of F
+
+Gianfranco: contributed to brainstorming in part A, did statistical analysis in part C, worked on part D, E and the visualization of F
+
+
+
+### Introduction
+
+The objective of this project was to analyze the historical evolution of priorities and perceived problems of the American public. Specifically we wanted to answer the question of _Can the language and content of proposed amendments reveal the century in which they were proposed?_ Answering this question is important because it will reveal how the issues Americans deemed critical have evolved and how historical context shapes our political and legal discourse.
+
+### Data curation
 
 
 
