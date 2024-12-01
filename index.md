@@ -1,5 +1,6 @@
 ---
 layout: default
+title: Home
 ---
 
 # Analysis of Proposed Amendments of the Constitution between 1787 to 2014
