@@ -2,6 +2,23 @@
 layout: default
 ---
 
+# Analysis of Proposed Amendments of the Constitution between 1787 to 2014
+Fall 2024 Data Science Project
+Michael McDonald
+Olanyi Salami
+Gianfranco Secondi
+Dhruvak Mirani
+
+Introduction
+
+
+
+
+
+
+
+
+
 Text can be **bold**, _italic_, or ~~strikethrough~~.
 
 [Link to another page](./another-page.html).
