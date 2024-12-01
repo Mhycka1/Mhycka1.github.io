@@ -1,4 +1,5 @@
 ---
+layout: default
 title: CMSC320 Final Project
 ---
 
