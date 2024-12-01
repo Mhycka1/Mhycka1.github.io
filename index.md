@@ -6,7 +6,7 @@ layout: default
 Michael McDonald, Dhruvak Mirani, Olaniyi Salami, Gianfranco Secondi
 
 
-### Contributions
+## Contributions
 Michael: contributed to brainstorming in part A, responsible for preprocessing in part B, data exploration in part C and assembling the document in part G
 
 Dhruvak: contributed to brainstorming in part A, did statistical analysis in part C, and wrote the conclusion for part F
@@ -17,11 +17,11 @@ Gianfranco: contributed to brainstorming in part A, did statistical analysis in 
 
 
 
-### Introduction
+## Introduction
 
 The objective of this project was to analyze the historical evolution of priorities and perceived problems of the American public. Specifically we wanted to answer the question _can the language and content of proposed amendments reveal the century in which they were proposed?_ Answering this question is important because it will reveal how the issues Americans deemed critical have evolved and how historical context shapes our political and legal discourse.
 
-### Data curation
+## Data curation
 
 Our data is a dataset of proposed amendments from the year 1787 to 2014. This dataset provides the title/description of each amendment, the date proposed, the sponsor name, the sponsor state, the Congress number, the congress sessions, the joint resolution chamber and the joint resolution number. 
 
@@ -906,7 +906,7 @@ df.head(5)
 
 And with that the dataset is now ready for analysis!
 
-### Exploratory Data Analysis
+## Exploratory Data Analysis
 
 ```python
 #total number of null values per feature
@@ -1031,7 +1031,7 @@ print(df['title_or_description_from_source'].str.contains("congress", case=False
     1440
 
 
-# FIRST STATISTICAL METHOD
+### FIRST STATISTICAL METHOD
 
 This section will do an Anova test.
 
@@ -1859,7 +1859,7 @@ post_anova_df
 We can see above that out of all the possible combination of groups, only 19 and 20 and 19 and 21 had a significant difference. This is because their p-values were less than 0.05. The other groups had larger p-values and thus did not have a significant difference due to a lack of strong evidence to suggest otherwise.
 
 
-# SECOND STATISTICAL METHOD
+### SECOND STATISTICAL METHOD
 
 This section will do a z-test.
 
@@ -1986,7 +1986,7 @@ Seeing that we have p-value of 0.0005 for the 21st century, we can reject the nu
 
 It is also interesting to note that the 19th century is most different from the overall mean so perhaps during that time events may have lead to amendment proposition to stray from the overall/norm.
 
-# THIRD STATISTICAL METHOD
+### THIRD STATISTICAL METHOD
 
 This section will do a chi-square test.
 
@@ -2124,3 +2124,270 @@ plt.show()
 
     
 ![png](Checkpoint_3_files/Checkpoint_3_34_0.png)
+
+## Primary Analysis
+
+Starts by collecting the data and splitting it such that a model can be trained on it. Eventually, we want to run clustering techniques. Thus, we we will soon apply dimensionality reduction techniques (PCA and t-SNE) and use K-means clustering to analyze the data.
+
+
+```python
+import pandas as pd
+import re
+def word_counter(text_series, common_words):
+    word_counts = defaultdict(int) #default value for any key will be 0, no need to initialize each word
+    for text in text_series:
+        if pd.notna(text): # checking if cell is not empty
+            for word in str(text).lower().split(): # split the string into words
+                word = re.sub(r'[^a-zA-Z0-9]', '', word)
+                if word and word not in common_words:
+                    word_counts[word] += 1
+    return word_counts
+def create_word_century_dataframe(df_18th, df_19th, df_20th, df_21st, common_words):
+  wct_18th = word_counter(df_18th['title_or_description_from_source'], common_words)
+  wct_19th = word_counter(df_19th['title_or_description_from_source'], common_words)
+  wct_20th = word_counter(df_20th['title_or_description_from_source'], common_words)
+  wct_21st = word_counter(df_21st['title_or_description_from_source'], common_words)
+
+  # Create a set of all unique words
+  all_words = set(wct_18th.keys()).union(wct_19th.keys(), wct_20th.keys(), wct_21st.keys())
+
+  # Create the dataframe
+  data = []
+  for word in all_words:
+    data.append([word, wct_18th.get(word, 0), wct_19th.get(word, 0),
+                 wct_20th.get(word, 0), wct_21st.get(word, 0)])
+
+  df_word_century = pd.DataFrame(data,
+                                 columns=['word', '18th', '19th', '20th', '21st'])
+
+  return df_word_century
+common_words = ["the", "a", "an", "and", "of", "to", "in", "is", "that", "it",
+                "for", "with", "as", "on", "by", "be"]
+df_word_century = create_word_century_dataframe(df_18th, df_19th, df_20th, df_21st, common_words)
+df_word_century['id'] = df_word_century.index + 1
+df_word_century
+X = df_word_century.drop(['word', 'id'], axis=1)
+y = df_word_century['word']
+X_test, X_train, y_test, y_train = train_test_split(X, y, test_size=0.2, random_state=42)
+
+```
+
+Below, we want to guess the elbow point k based on the given data. The number of clusters can be anywhere between 1 to 10. We'll discover which number that should be in the code below.
+
+
+```python
+distortions = []
+inertias = []
+mapping1 = {}
+mapping2 = {}
+K = range(1, 10)
+
+for k in K:
+
+    # Building and fitting the model
+    model_mean = KMeans(n_clusters=k).fit(X)
+    # Append your distortion value
+    distortion_value = sum(np.min(cdist(X, model_mean.cluster_centers_,
+                                        'euclidean'), axis=1)) / X.shape[0]
+    distortions.append(distortion_value)
+    inertia_value = model_mean.inertia_
+    inertias.append(inertia_value)
+    # Save it to mapping1 and mapping2
+    mapping1[k] = distortion_value
+    mapping2[k] = inertia_value
+# Plot
+
+plt.plot(K, distortions, "go--")
+plt.xlabel("K values")
+plt.ylabel("Model's distortion")
+plt.title("Elbow Method")
+plt.show()
+
+
+```
+
+
+    
+![png](Checkpoint_3_files/Checkpoint_3_38_0.png)
+    
+
+
+We can verify our conclusions above with KElbowVisualizer
+
+
+```python
+from sklearn import datasets
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+from yellowbrick.cluster import SilhouetteVisualizer
+from yellowbrick.cluster import KElbowVisualizer
+
+# Instantiate the clustering model and visualizer
+model = KMeans()
+visualizer = KElbowVisualizer(model, k=(1,10))
+visualizer.fit(X)
+visualizer.show()
+```
+
+
+    
+![png](Checkpoint_3_files/Checkpoint_3_40_0.png)
+    
+
+
+
+
+
+    <Axes: title={'center': 'Distortion Score Elbow for KMeans Clustering'}, xlabel='k', ylabel='distortion score'>
+
+
+
+From the graph above, we have verified that we want K to be 3. When k is equal to 3, this indicates that it is the most optimal number of clusters. Afterwards, the values do not drop as much for the following k's.
+
+Next we want to standardize the feature sets to make sure PCA or t-SNE is not biased by differences in scales within the  data.
+
+
+```python
+scaler = StandardScaler()
+
+X_scaled = scaler.fit_transform(X)
+X_scaled
+```
+
+
+
+
+    array([[-0.21279435, -0.16995953,  0.56904546,  0.28608658],
+           [-0.21279435, -0.24011895, -0.17907357, -0.10565952],
+           [-0.21279435, -0.09980011, -0.20899833,  0.00118033],
+           ...,
+           [-0.21279435, -0.16995953,  0.01044992, -0.10565952],
+           [-0.21279435, -0.24011895, -0.19902341, -0.10565952],
+           [-0.21279435, -0.24011895, -0.20899833, -0.10565952]])
+
+
+
+Next, we want to apply PCA. PCA is a dimensionality reduction technique that finds principal components, thereby maximizing variance in a dataset.
+
+
+```python
+# This function applies PCA and returns the transformed data.
+
+def apply_pca(X_scaled, n_components=2):
+    pca = PCA(n_components)
+    X_pca = pca.fit_transform(X_scaled)
+
+    return pca, X_pca
+
+
+pca, X_pca = apply_pca(X_scaled)
+print(X_pca)
+```
+
+    [[ 0.27711069  0.50858744]
+     [-0.36954838  0.09489809]
+     [-0.26674173  0.1150519 ]
+     ...
+     [-0.22259748  0.11304414]
+     [-0.38118383  0.0904905 ]
+     [-0.38700155  0.0882867 ]]
+
+
+After PCA, we also want to use t-SNE, which is a non-linear dimensionality reduction technique to visualize high-dimensional data. t-SNE preserves local structure, which is ideal for identifying clusters in complex datasets.
+
+
+```python
+# This function applies t-SNE and return the transformed data
+seed = 42
+
+def apply_tsne(X_scaled, n_components=2, random_state=seed):
+
+    tsne = TSNE(n_components,random_state=seed)
+    X_tsne = tsne.fit_transform(X_scaled)
+
+    return tsne, X_tsne
+
+# Apply t-SNE
+tsne, X_tsne = apply_tsne(X_scaled)
+
+```
+
+Finally, we reach K-Means clustering, an unsupervised learning algorithm for clustering. It's goal is to partition data into K clusters based on feature similarity. The algorithm works by iteratively assigning data points to the nearest centroid (cluster center) and updating centroids to minimize the variance within each cluster. It starts by randomly initializing centroids and repeats the process until the centroids stabilize (convergence)
+
+
+```python
+
+k_cluster = 4
+
+
+# TODO: Apply K-means clustering and return the cluster labels
+def apply_kmeans(X, n_clusters, random_state=seed):
+    means_model = KMeans(n_clusters, random_state=seed)
+    fitted_model = means_model.fit(X)
+    labels = fitted_model.labels_
+    print(labels)
+    return labels
+
+# Apply K-means to both PCA and t-SNE results
+pca_labels = apply_kmeans(X_pca, n_clusters = k_cluster)
+tsne_labels = apply_kmeans(X_tsne, n_clusters = k_cluster)
+
+
+## Visualization
+def plot_clusters(X, labels, title, xlabel, ylabel):
+    fig, ax = plt.subplots(figsize=(12, 8))
+
+    df_word_century['Cluster'] = pd.Categorical(labels)
+
+    # Get unique labels and corresponding colors
+    unique_labels = df_word_century['Cluster'].unique()
+    colors = sns.color_palette('viridis', n_colors=len(unique_labels))
+    color_map = dict(zip(unique_labels, colors))
+
+    # Create the scatter plot using sns.scatterplot
+    sns.scatterplot(x=X[:, 0], y=X[:, 1], hue="Cluster", data=df_word_century,
+                    s=45, palette=color_map, legend='full', ax=ax)
+
+    # Customize legend to display century names
+    handles, labels_legend = ax.get_legend_handles_labels()
+    century_names = ['18th Century', '19th Century', '20th Century', '21st Century']
+    ax.legend(handles=handles, labels=century_names[:len(labels_legend)],  # Use only necessary names
+              title='Centuries')
+
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.show()
+#print(X_pca)
+#print(X_pca.shape)
+
+# Visualize PCA results
+plot_clusters(X_pca, pca_labels,
+              'PCA: Word Clusters Based on Century', 'PC1', 'PC2')
+
+# Visualize t-SNE results
+plot_clusters(X_tsne, tsne_labels,
+              't-SNE:Word Clusters Based on Century', 't-SNE 1', 't-SNE 2')
+```
+
+    [0 0 0 ... 0 0 0]
+    [2 0 1 ... 3 0 1]
+
+
+
+    
+![png](Checkpoint_3_files/Checkpoint_3_48_1.png)
+    
+
+
+
+    
+![png](Checkpoint_3_files/Checkpoint_3_48_2.png)
+    
+
+
+Using the elbow method, the analysis identifies the optimal number of clusters as three. The distortion scores decrease sharply up to k=3, after which the decline becomes more gradual. This suggests that the dataset, which consists of modern descriptions of constitutional amendments introduced in the U.S., can be grouped into three distinct thematic categories. These clusters likely reflect differences in the focus or subject matter of the amendments.
+
+The PCA and t-SNE visualizations illustrate patterns within the dataset based on the century in which amendments were introduced. PCA shows relatively clear separability between clusters, while t-SNE highlights non-linear relationships among the data points. Descriptions of amendments introduced in the 18th and 19th centuries tend to form more cohesive clusters, potentially suggesting a narrower focus or more consistent themes for amendments from those time periods. In contrast, the descriptions of amendments introduced in the 20th and 21st centuries show more dispersed groupings, which may indicate a wider variety of amendment topics or a greater thematic complexity.
+
+These results suggest possible shifts in the subject matter of constitutional amendments over time, though a more rigorous sentiment analysis could be useful to confirm this, taking into account not just the frequency of words, but also the words' meanings. The cohesion of earlier clusters, moreover, might reflect a focus on a more limited range of priorities in the 18th and 19th centuries, while the increasing overlap in later clusters might correspond to a broader or more interconnected set of issues addressed by more recent amendments.
