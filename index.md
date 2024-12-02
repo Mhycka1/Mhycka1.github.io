@@ -2388,9 +2388,6 @@ plot_clusters(X_tsne, tsne_labels,
 
     
 ![png](images/Checkpoint_3_48_2.png)
-    
-
-## Visualization
 
 Using the elbow method, the analysis identifies the optimal number of clusters as three. The distortion scores decrease sharply up to k=3, after which the decline becomes more gradual. This suggests that the dataset, which consists of modern descriptions of constitutional amendments introduced in the U.S., can be grouped into three distinct thematic categories. These clusters likely reflect differences in the focus or subject matter of the amendments.
 
