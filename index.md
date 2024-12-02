@@ -2390,12 +2390,13 @@ plot_clusters(X_tsne, tsne_labels,
 ![png](images/Checkpoint_3_48_2.png)
     
 
+## Visualization
 
 Using the elbow method, the analysis identifies the optimal number of clusters as three. The distortion scores decrease sharply up to k=3, after which the decline becomes more gradual. This suggests that the dataset, which consists of modern descriptions of constitutional amendments introduced in the U.S., can be grouped into three distinct thematic categories. These clusters likely reflect differences in the focus or subject matter of the amendments.
 
 The PCA and t-SNE visualizations illustrate patterns within the dataset based on the century in which amendments were introduced. PCA shows relatively clear separability between clusters, while t-SNE highlights non-linear relationships among the data points. Descriptions of amendments introduced in the 18th and 19th centuries tend to form more cohesive clusters, potentially suggesting a narrower focus or more consistent themes for amendments from those time periods. In contrast, the descriptions of amendments introduced in the 20th and 21st centuries show more dispersed groupings, which may indicate a wider variety of amendment topics or a greater thematic complexity.
 
+## Insights and Conclusions
+
 These results suggest possible shifts in the subject matter of constitutional amendments over time, though a more rigorous sentiment analysis could be useful to confirm this, taking into account not just the frequency of words, but also the words' meanings. The cohesion of earlier clusters, moreover, might reflect a focus on a more limited range of priorities in the 18th and 19th centuries, while the increasing overlap in later clusters might correspond to a broader or more interconnected set of issues addressed by more recent amendments.
 
-
-## Conclusion
