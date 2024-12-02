@@ -2334,6 +2334,9 @@ pca_labels = apply_kmeans(X_pca, n_clusters = k_cluster)
 tsne_labels = apply_kmeans(X_tsne, n_clusters = k_cluster)
 
 
+ Visualization
+
+
 ## Visualization
 def plot_clusters(X, labels, title, xlabel, ylabel):
     fig, ax = plt.subplots(figsize=(12, 8))
