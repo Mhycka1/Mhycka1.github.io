@@ -2334,7 +2334,6 @@ pca_labels = apply_kmeans(X_pca, n_clusters = k_cluster)
 tsne_labels = apply_kmeans(X_tsne, n_clusters = k_cluster)
 
 
- Visualization
 
 
 ## Visualization
@@ -2378,7 +2377,7 @@ plot_clusters(X_tsne, tsne_labels,
     [2 0 1 ... 3 0 1]
 
 
-
+## Visualization
     
 ![png](images/Checkpoint_3_48_1.png)
     
