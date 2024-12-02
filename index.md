@@ -2001,6 +2001,7 @@ H₀: The distribution of proposed amendments is uniform across all states or te
 
 Hₐ: The distribution of proposed amendments is not uniform across all states or territories (i.e., some states or territories propose significantly more or fewer amendments than others).
 
+Here we drop any rows where the sponsor state is null and we then create a frequency table for the sponsor states and perform a chi squared test on the frequency table.
 
 ```python
 # Drop rows where sponsor_state_or_territory is NaN
@@ -2136,6 +2137,7 @@ Given that our goal is to see if the content of the amendments can show what cen
 
 Since clustering algorithms have to sift through a high number of features, we will reduce the dimensionality (complexity) of the dataset and features. We decided to use PCA and t-SNE as our reduction techniques. PCA is ideal for reducing dimensionality because it preserves the most significant patterns in data by finding points of maximum variance. In the case of textual data which can be high dimensional, this is very helpful. Unlike PCA, t-SNE does well at visualizing non-linear relationships which is also helpful for working with textual data. Together these two reduction techniques allow us effectively process and visualize trends that will be found in K-means clustering.
 
+Here we repeat the steps from our second statistical analysis and eliminate any filler words and create a method to count the occurences of words. We also create a method that creates a dataframe containing the common words of each century
 
 ```python
 import pandas as pd
@@ -2179,8 +2181,11 @@ X_test, X_train, y_test, y_train = train_test_split(X, y, test_size=0.2, random_
 
 ```
 
+We now look to create an elbow plot to help us determine what the optimal amount of clusters is for our analysis.
+
 Below, we want to guess the elbow point k based on the given data. The number of clusters can be anywhere between 1 to 10. We'll discover which number that should be in the code below.
 
+We create an Elbow plot to visualize the elbow point and show us how many clusters we should have.
 
 ```python
 distortions = []
@@ -2218,8 +2223,7 @@ plt.show()
 ![png](images/Checkpoint_3_38_0.png)
     
 
-
-We can verify our conclusions above with KElbowVisualizer
+It appears that k = 3 is the optimal amount of clusters as after this point the decrease in distortion as clusters increase is much lower. We can verify our conclusions above with KElbowVisualizer
 
 
 ```python
@@ -2401,3 +2405,10 @@ The PCA and t-SNE visualizations illustrate patterns within the dataset based on
 
 These results suggest possible shifts in the subject matter of constitutional amendments over time, though a more rigorous sentiment analysis could be useful to confirm this, taking into account not just the frequency of words, but also the words' meanings. The cohesion of earlier clusters, moreover, might reflect a focus on a more limited range of priorities in the 18th and 19th centuries, while the increasing overlap in later clusters might correspond to a broader or more interconnected set of issues addressed by more recent amendments.
 
+Overall our analysis has proven successful and allowed us to draw some meaningful conclusions from the dataset of proposed amendments. We can expect an uninformed reader to have gained some sort of knowledge on trends of amendments from our exploratory data analysis, various statistical testing and our primary analysis. But for readers experienced on this topic we believe our higher level scientific analysis of the clustering would prove informative and inspire a deeper look at written accounts of the events and amendments of those time periods. 
+
+We hope that this study has helped those reading further develop an interest in the historical problems and priorities of Americans and we invite you all to explore the below resources to learn more about these topics!
+
+- [Constitution proposal fact sheet](https://crsreports.congress.gov/product/pdf/R/R47959)
+
+- [Pew Research Center article on proposed amendments](https://www.pewresearch.org/short-reads/2018/04/12/a-look-at-proposed-constitutional-amendments-and-how-seldom-they-go-anywhere/)
