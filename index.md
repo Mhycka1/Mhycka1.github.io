@@ -2128,7 +2128,9 @@ plt.show()
 
 ## Primary Analysis
 
-Starts by collecting the data and splitting it such that a model can be trained on it. Eventually, we want to run clustering techniques. Thus, we we will soon apply dimensionality reduction techniques (PCA and t-SNE) and use K-means clustering to analyze the data.
+Given that our goal is to see if the content of the amendments can show what century they were proposed in, an unsupervised learning model would work best for our purposes as it could recognize underlying patterns that can help group amendments together. Since we don't need to predict outcomes, but rather discover patterns, we choose a clustering algorithm as opposed to classification or regression. We picked K-means as our clustering algorithm because it's simple to implement, computationally efficient, and works well on large datasets such as ours. 
+
+Since clustering algorithms have to sift through a high number of features, we will reduce the dimensionality (complexity) of the dataset and features. We decided to use PCA and t-SNE as our reduction techniques. PCA is ideal for reducing dimensionality because it preserves the most significant patterns in data by finding points of maximum variance. In the case of textual data which can be high dimensional, this is very helpful. Unlike PCA, t-SNE does well at visualizing non-linear relationships which is also helpful for working with textual data. Together these two reduction techniques allow us effectively process and visualize trends that will be found in K-means clustering.
 
 
 ```python
@@ -2394,3 +2396,6 @@ Using the elbow method, the analysis identifies the optimal number of clusters a
 The PCA and t-SNE visualizations illustrate patterns within the dataset based on the century in which amendments were introduced. PCA shows relatively clear separability between clusters, while t-SNE highlights non-linear relationships among the data points. Descriptions of amendments introduced in the 18th and 19th centuries tend to form more cohesive clusters, potentially suggesting a narrower focus or more consistent themes for amendments from those time periods. In contrast, the descriptions of amendments introduced in the 20th and 21st centuries show more dispersed groupings, which may indicate a wider variety of amendment topics or a greater thematic complexity.
 
 These results suggest possible shifts in the subject matter of constitutional amendments over time, though a more rigorous sentiment analysis could be useful to confirm this, taking into account not just the frequency of words, but also the words' meanings. The cohesion of earlier clusters, moreover, might reflect a focus on a more limited range of priorities in the 18th and 19th centuries, while the increasing overlap in later clusters might correspond to a broader or more interconnected set of issues addressed by more recent amendments.
+
+
+## Conclusion
