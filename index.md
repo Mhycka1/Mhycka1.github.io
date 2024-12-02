@@ -2409,6 +2409,8 @@ Overall our analysis has proven successful and allowed us to draw some meaningfu
 
 We hope that this study has helped those reading further develop an interest in the historical problems and priorities of Americans and we invite you all to explore the below resources to learn more about these topics!
 
+- [History of the US constitution](https://www.whitehouse.gov/about-the-white-house/our-government/the-constitution/)
+
 - [Constitution proposal fact sheet](https://crsreports.congress.gov/product/pdf/R/R47959)
 
-- [Pew Research Center article on proposed amendments](https://www.pewresearch.org/short-reads/2018/04/12/a-look-at-proposed-constitutional-amendments-and-how-seldom-they-go-anywhere/)
+- [Research article on proposed amendments](https://www.pewresearch.org/short-reads/2018/04/12/a-look-at-proposed-constitutional-amendments-and-how-seldom-they-go-anywhere/)
