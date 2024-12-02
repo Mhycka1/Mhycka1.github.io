@@ -909,6 +909,9 @@ And with that the dataset is now ready for analysis!
 
 ## Exploratory Data Analysis
 
+
+The first step we take is to check how many null features entries there are for each feature so we can best decide how to handle missing values
+
 ```python
 #total number of null values per feature
 df.isnull().sum()
@@ -1008,6 +1011,8 @@ df.isnull().sum()
 </table>
 </div><br><label><b>dtype:</b> int64</label>
 
+We see that there are a LOT of missing dates which could be very problematic in our analysis. We don't know how many total columns there are so we check to see so we can make observations and decide how to handle the null values 
+
 ```python
 # total number of samples
 df.shape[0]
@@ -1017,6 +1022,10 @@ df.shape[0]
 
 
     11797
+
+So we see there's almost 12000 data points and of those almost 10% of those are missing dates. Manually scanning the dataset shows that most of these missing dates are before the 1800s and are Missing Not at Random (MNAR) as a result. Because there's a direct correlation between the missing date and the year being before the 1800's, we will not drop these rows of data.
+
+Scanning the dataset we see some words popping up somewhat often so we do some searches for these terms, and count the amount to make some observations. We observe that the term "equal rights" appears over 1100 times and the word "congress" aooears over 1400 times.
 
 ```python
 #notes/observations
@@ -1043,7 +1052,7 @@ H0: The century the US is in does not have an impact on the amendments proposed.
 H1: The century the US is in does have an impact on the amendments proposed.
 
 
-
+To test the hypothesis we create a new column in the dataframe to hold the centuries the amendment falls under. We iterate through the dataframe, calculating and adding these values to the "century" column for each data point. We then create a new dataframe for each century category and print them out to visualize them
 
 ```python
 # Create the new column and assign an entry for each row based on centuries.
@@ -1335,6 +1344,7 @@ print(df_21st)
     [550 rows x 13 columns]
 
 
+Next we calculate the p value by using the values of the total number of amendments for each year
 
 ```python
 # displaying the p-value of applying the ANOVA test. We need to gather the total amount of amendments passed for each year.
@@ -1348,17 +1358,13 @@ df_21st_count = df_21st["year"].value_counts()
 scipy.f_oneway(df_18th_count,df_19th_count,df_20th_count,df_21st_count)
 
 ```
-
-
-
-
     F_onewayResult(statistic=14.45090424771137, pvalue=1.2864530210399601e-08)
-
 
 
 Note that the p-value from above is basically 0. Since it was mentioned that α=0.05, then we reject the null hypothesis. This is because p-value is a measure utilized to quantify the strength of evidence against the null hypothesis. In this case, since the p-value, or 0.016, is less than 0.05, then the p-value has strong enough evidence to reject the null hypothesis. In other words, the century the US is in does indeed have an impact on the amendments proposed.
 
 
+Next we create a boxplot to visualize the number of amendments for each century
 ```python
 # Construct a dataframe for each century.
 
@@ -1391,14 +1397,9 @@ plt.show()
     
 ![png](images/Checkpoint_3_10_0.png)
     
-
-
 The datapoints you see on the graph above represent findings about the number of amendments proposed for a given century. For example, in the 20th century, there's an outlier where 600 amendments were proposed! In other words, one year in the 20th century proposed 600 amendments. In the 18th century, their outlier was 200 amendments proposed instead. Through a box and whiskers plot, you can also see the median and estimate the mean number of amendments proposed for each century. For example, the mean and median for the 18th century is rather close to 0, which can be seen isn't the case for the 20th century.
 
-Here are separate graphs that demonstrates the distribution for each century.
-
-
-
+Below are separate graphs that demonstrates the distribution for each century.
 
 ```python
 plt.title("Histogram of 18th century")
@@ -1493,6 +1494,7 @@ Most of these graphs paint a distribution in which it is skewed to the right. Th
 
 Naturally, because we are doing an ANOVA test with multiple groups and rejected the null hypothesis, it begs the question: which groups significantly differ from one another?
 
+Since we rejected the null hypothesis and have more than two groups, we do a post hoc analysis to see whcih groups differ from each other
 
 ```python
 # Because we rejected the null hypothesis and we are dealing with more than two groups, let's do a post hoc test analysis
@@ -1872,7 +1874,7 @@ Hₐ: The mean freqeuncy of words used in a random sample of each century will d
 
 
 
-Defining methods, meant to count the frequencies/store them in a dictionary, and plot those dictionaries respectively.
+We create two method to help in our analysis: one to create a dictionary of the counts of each word in a random sample, and one to plot the most frequent words. Prior to plotting, we remove all filler words and other words like "constituion", "Unites States", "amendment" or any other common words that we would expect to see in most, if not all descriptions/titles of proposed amendments. After doing this we make a bar graph consisting of the top 50 words with the highest frequency.
 
 
 ```python
@@ -1917,10 +1919,9 @@ def plot_words(curr_df, title):
 
 ```
 
-This first section just shows some interesting analysis on the frequencies of words used in proposing amendments, excluding those that are extremely common such as 'the', 'to', 'of', etc.
+We are using samples because each century has significantly different number of amendments proposed so we want to normalize for that difference (though this does not do so for centuries where amendment titles were more verbose).
 
-This is done using samples as each century has significantly different number of amendments proposed so we wanted to normalize for that difference (though this does not do so for centuries where amendment titles were more verbose).
-
+Now we create a plot of words for each century 
 
 ```python
 counts_overall = plot_words(df.sample(n=300, random_state = 42), "Overall")
@@ -1958,10 +1959,9 @@ counts_21st = plot_words(df_21st.sample(n = 300, random_state = 42), "21st Centu
     
 ![png](images/Checkpoint_3_25_4.png)
     
+There is a lot of variation in the graphs for each centurym with only two centuries even having one common word in the top three frequencies. There is absolutely no similarities between any of these graphs and seeing they're significantly different from each other, we would like to see if the frequency of words in each century is significantly different from the frequency overall. This could help reveal if any century most defines the rate of words used across the history of the United States.
 
-
-Seeing that the graphs are significantly different from each other, we would like to see if the frequency of words in each century is significantly different from the frequency overall. This could help reveal if any century most defines the rate of words used across the history of the United States.
-
+Here we calculate the p-value for each century which lets us determine the statistical differences between each category
 
 ```python
 import statsmodels.stats.weightstats as stats
@@ -1983,7 +1983,11 @@ for sample in arr:
     21st century: 2.764096532922159e-06
 
 
-Seeing that we have p-value of 0.0005 for the 21st century, we can reject the null hypothesis while failing to reject the null hypothesis for the rest. This may lead us to conclude some things. One, that we have proposed more amendments in the 21st century so the average frequency is most reflected by recent times. Two, we may have used a similar distribution of words with one topic potentially being predominant overall and in the 21st century, or being more evenly spread in both cases. Or three, that the data is skewed heavily towards the 21st century since we have better records of the titles of proposed amendments.
+Seeing that we have p-value of around 0.006 for the 21st century, which falls far under the threshold of 0.05 we can reject the null hypothesis while failing to reject the null hypothesis for the rest. This may lead us to conclude some things:
+
+-  One, that we have proposed more amendments in the 21st century so the average frequency is most reflected by recent times. 
+-  Two, we may have used a similar distribution of words with one topic potentially being predominant overall and in the 21st century, or being more evenly spread in both cases. 
+-  Three, that the data is skewed heavily towards the 21st century since we have better records of the titles of proposed amendments.
 
 It is also interesting to note that the 19th century is most different from the overall mean so perhaps during that time events may have lead to amendment proposition to stray from the overall/norm.
 
